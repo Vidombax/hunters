@@ -19,9 +19,11 @@
     try {
       if (isLoginModal.value === true) {
         await userStore.login(user.value);
+        location.replace('/');
       }
       else {
         await userStore.register(user.value);
+        location.replace('/');
       }
     }
     catch (e) {

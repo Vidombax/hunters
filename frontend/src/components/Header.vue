@@ -4,16 +4,19 @@
   import Profile from '@/components/Profile.vue'
   import Search from '@/components/Search.vue'
 
+
+  let id = localStorage.getItem('id');
 </script>
 
 <template>
   <header class="p-4">
     <div class="name">
-      <router-link to="/">
+      <router-link to="/" v-if="id">
         <p class="text-4xl">Hunters</p>
       </router-link>
+      <p class="text-4xl" v-else>Hunters</p>
     </div>
-    <div class="actions">
+    <div class="actions" v-if="id">
       <Search />
       <Profile />
     </div>

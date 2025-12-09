@@ -1,5 +1,12 @@
 <script setup>
+  import { onMounted } from 'vue'
   import Header from '@/components/Header.vue'
+
+  onMounted(() => {
+    if (!localStorage.getItem('id') && location.href !== `http://${location.host}/login`) {
+      location.replace('/login');
+    }
+  });
 </script>
 
 <template>

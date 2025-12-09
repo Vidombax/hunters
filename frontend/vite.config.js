@@ -20,7 +20,7 @@ export default defineConfig({
   },
   server: {
     proxy: {
-      '/api': {
+      '/api/': {
         target: process.env.HOST || 'http://localhost:3000',
         changeOrigin: true,
         secure: false,

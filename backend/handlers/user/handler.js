@@ -26,8 +26,8 @@ class UserHandler {
 
                 //Создаем новый аккаунт
                 const createUser = await client.query(
-                    'INSERT INTO users (name, password_user) ' +
-                    'VALUES ($1, $2, $3, 0)' +
+                    'INSERT INTO users (name, password, is_admin) ' +
+                    'VALUES ($1, $2, false)' +
                     'RETURNING *',
                     [name.trim(), hashedPassword]
                 );
@@ -71,7 +71,7 @@ class UserHandler {
             );
 
             if (getUser.rows.length !== 0) {
-                const isValidPassword = await bcrypt.compare(password, getUser.rows[0].password_user)
+                const isValidPassword = await bcrypt.compare(password, getUser.rows[0].password)
                 if (isValidPassword) {
                     const token = jwt.sign(
                         { name: name },
@@ -111,7 +111,7 @@ class UserHandler {
             await client.query('BEGIN');
 
             const createComment = await client.query(
-                'INSERT INTO comments (id_tread, id_user, comment, date_publish) ' +
+                'INSERT INTO comments (id_thread, id_user, text, date_publish) ' +
                 'VALUES ($1, $2, $3, CURRENT_TIME)',
                 [idThread, idUser, comment.trim()]
             );
@@ -139,16 +139,16 @@ class UserHandler {
             await client.query('BEGIN');
 
             const getRate = await client.query(
-                'SELECT * FROM tread_scores ' +
-                'WHERE id_user = $1 AND id_tread = $2',
+                'SELECT * FROM thread_scores ' +
+                'WHERE id_user = $1 AND id_thread = $2',
                 [idUser, idTread]
             );
 
             if (getRate.rows.length > 0) {
                 if (getRate.rows[0].score !== score) {
                     const updateRate = await client.query(
-                        'UPDATE tread_scores SET score = $1 ' +
-                        'WHERE id_user = $2 AND id_tread = $3',
+                        'UPDATE thread_scores SET score = $1 ' +
+                        'WHERE id_user = $2 AND id_thread = $3',
                         [score, idUser, idTread]
                     );
                     res.status(200).json({ message: 'Оценка обновлена' });
@@ -160,7 +160,7 @@ class UserHandler {
             }
             else {
                 const createRate = await client.query(
-                    'INSERT INTO tread_scores (id_tread, id_user, score) ' +
+                    'INSERT INTO thread_scores (id_thread, id_user, score) ' +
                     'VALUES ($1, $2, $3)',
                     [idTread, idUser, score]
                 );
