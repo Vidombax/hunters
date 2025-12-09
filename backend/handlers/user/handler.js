@@ -100,6 +100,34 @@ class UserHandler {
             client.release();
         }
     }
+    async createComment(req, res) {
+        const funcName = 'createComment';
+
+        const { idThread, idUser, comment } = req.body;
+
+        const client = await db.connect();
+
+        try {
+            await client.query('BEGIN');
+
+            const createComment = await client.query(
+                'INSERT INTO comments (id_tread, id_user, comment, date_publish) ' +
+                'VALUES ($1, $2, $3, CURRENT_TIME)',
+                [idThread, idUser, comment.trim()]
+            );
+            res.status(200).json({ message: 'Комментарий создан' });
+
+            await client.query('COMMIT');
+        }
+        catch (e) {
+            await client.query('ROLLBACK');
+            logger.error(`${funcName}: Ошибка создания комментария:`, e);
+            res.status(500).json({ message: 'Ошибка на стороне сервера' });
+        }
+        finally {
+            client.release();
+        }
+    }
     async rateTread(req, res) {
         const funcName = 'rateTread';
 

@@ -14,9 +14,7 @@
       </router-link>
     </div>
     <div class="actions">
-      <Search
-          :is-search-glass="isActiveIcon"
-      />
+      <Search />
       <Profile />
     </div>
   </header>
