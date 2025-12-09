@@ -52,10 +52,17 @@ button:focus {
 .positive {
     background-color: #55c51c;
 }
+
 .negative {
     background-color: #B71C1C;
 }
 
 .selected {
     fill: #f1801e;
+}
+
+input {
+    background-color: #FFF;
+    padding: 4px;
+    border: 2px solid #B71C1C;
 }
