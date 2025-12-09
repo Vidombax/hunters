@@ -2,15 +2,15 @@
   import { ref } from 'vue'
 
   const props = defineProps({
-    idPanel: Number,
-    panelName: String
+    id: Number,
+    name: String,
   });
 </script>
 
 <template>
-  <div class="block">
-    <p>{{ props.panelName }}</p>
-  </div>
+  <button>
+    {{ props.name }}
+  </button>
 </template>
 
 <style scoped>

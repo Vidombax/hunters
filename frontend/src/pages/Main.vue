@@ -8,29 +8,58 @@
   const treadStore = useTreadStore();
 
   const treads = ref([]);
+  const filters = ref([]);
   const isLoaded = ref(false);
   const isTreadsOpen = ref(true);
 
-  onMounted(async () => {
+  let filter_test = {
+    id_filter: 1,
+    name: 'Вампиры'
+  }
+  let filter_test2 = {
+    id_filter: 2,
+    name: 'Охотники'
+  }
+  let tread = {
+    idTread: 1,
+    header: 'Тестовый тред',
+    date: '09.12.2025',
+    idUser: 1,
+    userName: 'admin'
+  }
 
+  onMounted(async () => {
+    filters.value.push(filter_test)
+    filters.value.push(filter_test2)
+    filters.value.push(filter_test)
+    filters.value.push(filter_test2)
   });
 </script>
 
 <template>
   <div class="blocks_selector">
-    <p>Треды</p>
-    <p>Чаты</p>
+    <p class="block block_selected">Треды</p>
+    <p class="block">Чаты</p>
   </div>
-  <transition name="block">
-    <div class="treads_block" v-if="isTreadsOpen">
-      <TreadsFilters />
+  <transition name="block" v-if="isTreadsOpen">
+    <div class="treads_block">
+      <TreadsFilters :tread-types="filters" />
       <div class="treads">
-        <Tread />
+        <Tread
+            v-for="item in 10"
+            :key="item.id"
+            :id-tread="tread.idTread"
+            :header="tread.header"
+            :date="tread.date"
+            :id-user="tread.idUser"
+            :user-name="tread.userName"
+            :types-tread="filters"
+        />
       </div>
     </div>
   </transition>
-  <transition name="block">
-    <div class="chats_block" v-else>
+  <transition name="block" v-else>
+    <div class="chats_block">
       <div class="all_chats">
 
       </div>
@@ -49,5 +78,19 @@
     flex-direction: column;
     gap: 12px;
     padding: 1rem;
+  }
+  .blocks_selector {
+    display: flex;
+    justify-items: center;
+    justify-content: flex-start;
+    gap: 1rem;
+    padding-bottom: 1rem;
+  }
+  .block {
+    font-size: larger;
+    cursor: pointer;
+  }
+  .block_selected {
+    border-bottom: #B71C1C solid 4px;
   }
 </style>

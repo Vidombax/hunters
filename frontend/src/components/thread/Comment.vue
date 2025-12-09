@@ -3,12 +3,12 @@
 
   import Votes from '@/components/Votes.vue'
 
-  const props = ref(defineProps({
+  const props = defineProps({
     idUser: Number,
     nameUser: String,
     comment: String,
     votes: Number
-  }))
+  })
 </script>
 
 <template>

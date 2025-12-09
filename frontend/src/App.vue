@@ -20,4 +20,9 @@
     box-sizing: border-box;
     width: 100%;
   }
+
+  main {
+    background-color: #0D0D0D;
+    padding: 2rem;
+  }
 </style>
