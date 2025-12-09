@@ -1,10 +1,18 @@
 <script setup>
   import { ref } from 'vue'
+
+  const isActiveIcon = ref(true);
+
+  const handlerIconSearch = () => {
+    isActiveIcon.value = isActiveIcon.value !== true;
+  }
 </script>
 
 <template>
-  <div class="cursor-pointer">
-      <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
+  <transition v-if="isActiveIcon" name="in">
+    <div class="cursor-pointer">
+      <svg xmlns="http://www.w3.org/2000/svg"
+           @click="handlerIconSearch"
            width="45px" height="43px" viewBox="0 0 428.000000 412.000000"
            preserveAspectRatio="xMidYMid meet">
 
@@ -26,10 +34,92 @@
   30 13 0 13 -58 15 -124 4z"/>
         </g>
       </svg>
-  </div>
+    </div>
+  </transition>
+  <transition v-else name="out" mode="out-in">
+    <div class="searchbar_div">
+      <input type="text" class="searchbar" />
+      <button>Поиск</button>
+      <div class="search_modal">
+        <div class="header">
+          <p>Поиск</p>
+          <button @click="handlerIconSearch">X</button>
+        </div>
+        <div class="item">
+          <input type="text" />
+          <button>Применить</button>
+        </div>
+      </div>
+      <div class="overlay"></div>
+    </div>
+  </transition>
 
 </template>
 
 <style scoped>
+  .searchbar {
+    background-color: #FFF;
+    width: 170%;
+    padding: 6px;
+  }
+  .searchbar_div {
+    display: flex;
+    gap: 8px;
+  }
+  .search_modal {
+    display: none;
+  }
+  .in-enter-active,
+  .in-leave-active {
+    transition: all 0.3s ease;
+  }
 
+  .in-enter-from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+
+  .in-leave-to {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  @media screen and (max-width: 768px) {
+    .searchbar {
+      display: none;
+    }
+    .search_modal {
+      display: flex;
+      background-color: #FFFFF0;
+      position: fixed;
+      top: 0;
+      left: 25px;
+      right: 25px;
+      padding: 12px;
+      flex-direction: column;
+      border-radius: 12px;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      width: 100%;
+    }
+    .header p {
+      color: #0D0D0D;
+    }
+    .item {
+      display: flex;
+      padding: 12px;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .item input {
+      background-color: #FFFF;
+      border: #0D0D0D solid 2px;
+      width: 80%;
+    }
+  }
 </style>

@@ -4,7 +4,6 @@
   import Profile from '@/components/Profile.vue'
   import Search from '@/components/Search.vue'
 
-  const isActiveIcon = ref(true);
 </script>
 
 <template>
@@ -15,9 +14,9 @@
       </router-link>
     </div>
     <div class="actions">
-      <transition>
-        <Search />
-      </transition>
+      <Search
+          :is-search-glass="isActiveIcon"
+      />
       <Profile />
     </div>
   </header>
