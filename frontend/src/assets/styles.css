@@ -48,3 +48,14 @@ button:focus {
     box-shadow: rgba(213, 217, 217, .5) 0 2px 5px 0;
     outline: 0;
 }
+
+.positive {
+    background-color: #55c51c;
+}
+.negative {
+    background-color: #B71C1C;
+}
+
+.selected {
+    fill: #f1801e;
+}

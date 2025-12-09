@@ -3,6 +3,7 @@
 
   import Votes from '@/components/Votes.vue'
   import Cheap from '@/components/main/Cheap.vue'
+  import Share from "@/components/svg/Share.vue";
 
   const props = defineProps({
     idTread: Number,
@@ -27,7 +28,6 @@
       <router-link :to="'/tread/' + props.idTread">
         <p class="text-2xl header">{{ props.header }}</p>
       </router-link>
-      <p class="text-xs ext-text">{{ props.date }}</p>
     </div>
     <div class="user">
       <router-link :to="'/user/' + props.idUser">
@@ -36,8 +36,15 @@
       </router-link>
     </div>
     <div class="share_tread">
-      <Votes />
-      <div class="share"></div>
+      <div>
+        <p class="text-xs ext-text date">{{ props.date }}</p>
+      </div>
+      <Votes
+          :votes="10"
+      />
+      <div class="share">
+        <Share />
+      </div>
     </div>
   </div>
 </template>
@@ -90,5 +97,22 @@
     gap: 6px;
     align-items: center;
     margin-bottom: 6px;
+  }
+  .share_tread {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(1, 1fr);
+    gap: 8px;
+    align-items: center;
+  }
+  .date {
+    grid-column: span 3 / span 3;
+    width: 35px;
+  }
+  .votes {
+    grid-column-start: 4;
+  }
+  .share {
+    grid-column-start: 5;
   }
 </style>

@@ -10,7 +10,9 @@
 <template>
   <header class="p-4">
     <div class="name">
-      <p class="text-4xl">Hunters</p>
+      <router-link to="/">
+        <p class="text-4xl">Hunters</p>
+      </router-link>
     </div>
     <div class="actions">
       <transition>

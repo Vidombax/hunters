@@ -66,4 +66,18 @@
       gap: 12px;
     }
   }
+  @media screen and (max-width: 768px) {
+    .carousel_of_types {
+      width: 300px;
+      scrollbar-width: thin;
+      scrollbar-color: #888 #f1f1f1;
+      overflow-y: scroll;
+      padding: 0.8rem;
+
+      &::-webkit-scrollbar {
+        display: block;
+        height: 8px;
+      }
+    }
+  }
 </style>
