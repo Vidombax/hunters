@@ -1,24 +1,46 @@
 <script setup>
   import { ref } from 'vue'
+  import { useUserStore } from '@/stores/user_store.js'
 
+  const userStore = useUserStore();
   const isLoginModal = ref(true);
+  const user = ref({
+    name: '',
+    password: ''
+  });
 
   const handlerChooseModal = () => {
     isLoginModal.value = isLoginModal.value !== true;
+    user.value.name = '';
+    user.value.password = '';
+  }
+
+  const handleAuthorization = async () => {
+    try {
+      if (isLoginModal.value === true) {
+        await userStore.login(user.value);
+      }
+      else {
+        await userStore.register(user.value);
+      }
+    }
+    catch (e) {
+      console.error(e);
+    }
   }
 </script>
 
 <template>
   <div class="login" v-if="isLoginModal">
-    <input type="text" placeholder="Логин" />
-    <input type="password" placeholder="Пароль" />
-    <button>Войти</button>
+    <input type="text" placeholder="Логин" v-model="user.name" />
+    <input type="password" placeholder="Пароль" v-model="user.password" />
+    <button @click="handleAuthorization">Войти</button>
     <p class="choose_modal" @click="handlerChooseModal">Нету аккаунта</p>
   </div>
   <div class="registration" v-else>
-    <input type="text" placeholder="Придумайте логин" />
-    <input type="password" placeholder="Придумайте пароль" />
-    <button style="width: 225px;">Зарегистрироваться</button>
+    <input type="text" placeholder="Придумайте логин" v-model="user.name" />
+    <input type="password" placeholder="Придумайте пароль" v-model="user.password" />
+    <button style="width: 225px;" @click="handleAuthorization">Зарегистрироваться</button>
     <p class="choose_modal" @click="handlerChooseModal">Войти в существующий аккаунт</p>
   </div>
 </template>
