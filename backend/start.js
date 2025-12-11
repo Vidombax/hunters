@@ -2,13 +2,15 @@ import express from 'express'
 import dotenv from 'dotenv'
 dotenv.config();
 
-import userMainRouter from './routes/user/route.js'
+import userRouter from './routes/user/route.js'
+import threadRouter from './routes/thread/route'
 
 const app = express();
 
 app.use(express.json());
 
-app.use('/', userMainRouter);
+app.use('/', userRouter);
+app.use('/', threadRouter);
 
 const PORT = process.env.PORT || 3001;
 
