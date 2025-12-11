@@ -3,11 +3,11 @@
   import TreadsFilters from '@/components/main/TreadsFilters.vue'
   import Tread from '@/components/main/Tread.vue'
 
-  import { useTreadStore } from '@/stores/tread_store.js'
+  import { useThreadStore } from '@/stores/thread_store.js'
 
-  const treadStore = useTreadStore();
+  const threadStore = useThreadStore();
 
-  const treads = ref([]);
+  const threads = ref([]);
   const filters = ref([]);
   const isLoaded = ref(false);
   const isTreadsOpen = ref(true);
@@ -20,19 +20,9 @@
     id_filter: 2,
     name: 'Охотники'
   }
-  let tread = {
-    idTread: 1,
-    header: 'Тестовый тред',
-    date: '09.12.2025',
-    idUser: 1,
-    userName: 'admin'
-  }
 
   onMounted(async () => {
-    filters.value.push(filter_test)
-    filters.value.push(filter_test2)
-    filters.value.push(filter_test)
-    filters.value.push(filter_test2)
+
   });
 </script>
 
