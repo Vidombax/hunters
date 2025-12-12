@@ -6,6 +6,10 @@
   const handlerIconSearch = () => {
     isActiveIcon.value = isActiveIcon.value !== true;
   }
+
+  const makeSearch = () => {
+    isActiveIcon.value = true;
+  }
 </script>
 
 <template>
@@ -39,7 +43,7 @@
   <transition v-else name="out" mode="out-in">
     <div class="searchbar_div">
       <input type="text" class="searchbar" />
-      <button>Поиск</button>
+      <button @click="makeSearch">Поиск</button>
       <div class="search_modal">
         <div class="header">
           <p>Поиск</p>
@@ -47,7 +51,7 @@
         </div>
         <div class="item">
           <input type="text" />
-          <button>Применить</button>
+          <button @click="makeSearch">Применить</button>
         </div>
       </div>
       <div class="overlay"></div>
