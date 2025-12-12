@@ -42,7 +42,7 @@
       <p class="text-3xl">{{ thread.header }}</p>
     </div>
     <div class="description">
-      <p class="text-xl">{{ thread.description }}</p>
+      <p class="text-xl" :innerHTML="thread.description"></p>
     </div>
     <div class="action_block">
       <Votes :votes="score" />

@@ -1,6 +1,4 @@
 <script setup>
-  import { ref } from 'vue'
-
   import Votes from '@/components/Votes.vue'
   import Cheap from '@/components/main/Cheap.vue'
   import Share from "@/components/svg/Share.vue";
@@ -20,7 +18,7 @@
   <div class="tread">
     <div class="tread_types">
       <Cheap
-          v-for="item in typesTread.tags"
+          v-for="item in typesTread"
           :key="item.id"
           :name="item.name"
       />

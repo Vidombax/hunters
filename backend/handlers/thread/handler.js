@@ -6,18 +6,20 @@ import logger from '../../logger.js'
 class ThreadHandler {
     async createThread(req, res) {
         const funcName = 'createThread';
-        const { id_user, header, description, tags } = req.body;
+        const { id_user, header, description, tags, raw_description } = req.body;
 
         const client = await db.connect();
 
         try {
             await client.query('BEGIN');
 
+            const tagsJson = Array.isArray(tags) ? JSON.stringify(tags) : tags;
+
             const thread = await client.query(
-                'INSERT INTO threads (header, description, date_publish, id_user, is_active, tags) ' +
-                'VALUES ($1, $2, $3, CURRENT_DATE, $4, false, $5) ' +
+                'INSERT INTO threads (header, description, date_publish, id_user, is_active, tags, raw_description) ' +
+                'VALUES ($1, $2, CURRENT_DATE, $3, false, $4, $5) ' +
                 'RETURNING *',
-                [header.trim(), description.trim(), id_user, tags]
+                [header.trim(), description.trim(), id_user, tagsJson, raw_description]
             );
 
             await client.query('COMMIT');
