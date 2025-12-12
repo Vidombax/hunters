@@ -10,5 +10,6 @@ router.get('/thread/:id', authenticateToken, handler.getThread);
 router.get('/threads', authenticateToken, handler.getThreads);
 router.put('/thread', authenticateToken, handler.updateThread);
 router.put('/visibility-thread', authenticateToken, handler.setVisibilityThread);
+router.get('/tags', authenticateToken, handler.getTags);
 
 export default router

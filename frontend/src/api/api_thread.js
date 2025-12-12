@@ -45,11 +45,21 @@ async function setVisibilityThread(data) {
 
     return (await axios.put(`/api/visibility-thread`, data, config)).data;
 }
+async function getTags(data) {
+    const config = {
+        headers: {
+            Authorization: `${data.token}`
+        }
+    };
+
+    return (await axios.get(`/api/tags`, config)).data;
+}
 
 export default {
     createThread,
     getThread,
     getThreads,
     updateThread,
-    setVisibilityThread
+    setVisibilityThread,
+    getTags
 }

@@ -6,6 +6,7 @@ export const useThreadStore = defineStore('thread', () => {
     const thread = ref(null);
     const threads = ref(null);
     const message = ref('');
+    const tags = ref(null);
     const loading = ref(false);
     const error = ref(null);
 
@@ -99,6 +100,24 @@ export const useThreadStore = defineStore('thread', () => {
         }
     }
 
+    async function getTags(data) {
+        loading.value = true;
+        error.value = null;
+
+        try {
+            tags.value = await api.getTags(data);
+
+            return tags.value.tags;
+        }
+        catch (err) {
+            error.value = err.response?.data?.message || 'Ошибка вывода тэгов';
+            throw err;
+        }
+        finally {
+            loading.value = false;
+        }
+    }
+
     return {
         thread,
         threads,
@@ -109,6 +128,7 @@ export const useThreadStore = defineStore('thread', () => {
         getThread,
         getThreads,
         updateThread,
-        setVisibilityThread
+        setVisibilityThread,
+        getTags
     }
 })

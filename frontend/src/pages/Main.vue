@@ -14,24 +14,13 @@
   const token = ref(localStorage.getItem('token'));
   const data = ref({});
 
-  let filter_test = {
-    id_filter: 1,
-    name: 'Вампиры'
-  }
-  let filter_test2 = {
-    id_filter: 2,
-    name: 'Охотники'
-  }
-
-  filters.value.push(filter_test)
-  filters.value.push(filter_test2)
-
   onMounted(async () => {
     const data = {
       token: token.value
     }
 
     threads.value = await threadStore.getThreads(data);
+    filters.value = await threadStore.getTags(data);
   });
 </script>
 

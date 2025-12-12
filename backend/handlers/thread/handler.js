@@ -253,6 +253,56 @@ class ThreadHandler {
             client.release();
         }
     }
+    async getTags(req, res) {
+        const funcName = 'getTags';
+
+        const client = await db.connect();
+
+        try {
+            await client.query('BEGIN');
+
+            const tags = await client.query(
+                `SELECT * FROM tags WHERE is_active = true`
+            );
+
+            if (tags.rows.length > 0) {
+                res.status(200).json({ message: 'Получили тэги', tags: tags.rows });
+            }
+            else {
+                res.status(404).json({ message: 'Не нашли тэги' });
+            }
+
+            await client.query('COMMIT');
+        }
+        catch (e) {
+            await client.query('ROLLBACK');
+            logger.error(`${funcName}: Ошибка вывода тэгов:`, e);
+            res.status(500).json({ message: 'Ошибка на стороне сервера' });
+        }
+        finally {
+            client.release();
+        }
+    }
+    async getTagsByThreads(req, res) {
+        const funcName = 'getTagsByThreads';
+
+        const client = await db.connect();
+
+        try {
+            await client.query('BEGIN');
+
+
+            await client.query('COMMIT');
+        }
+        catch (e) {
+            await client.query('ROLLBACK');
+            logger.error(`${funcName}: Ошибка вывода тэгов по тредам:`, e);
+            res.status(500).json({ message: 'Ошибка на стороне сервера' });
+        }
+        finally {
+            client.release();
+        }
+    }
 }
 
 export default new ThreadHandler();
