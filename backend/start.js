@@ -3,7 +3,7 @@ import dotenv from 'dotenv'
 dotenv.config();
 
 import userRouter from './routes/user/route.js'
-import threadRouter from './routes/thread/route'
+import threadRouter from './routes/thread/route.js'
 
 const app = express();
 

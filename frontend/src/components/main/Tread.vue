@@ -11,7 +11,8 @@
     date: Date,
     idUser: Number,
     userName: String,
-    typesTread: Array
+    typesTread: Array,
+    score: Number
   });
 </script>
 
@@ -40,7 +41,7 @@
         <p class="text-xs ext-text date">{{ props.date }}</p>
       </div>
       <Votes
-          :votes="10"
+          :votes="score"
       />
       <div class="share">
         <Share />

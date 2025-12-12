@@ -10,6 +10,7 @@
   <div class="votes">
     <div class="up"><Arrow/></div>
     <div v-if="votes > 0" class="positive">{{ props.votes }}</div>
+    <div v-else-if="votes === 0" class="passive">{{ props.votes }}</div>
     <div v-else class="negative">{{ props.votes }}</div>
     <div class="down"><Arrow /></div>
   </div>
@@ -25,7 +26,8 @@
     padding: 4px;
   }
   .positive,
-  .negative {
+  .negative,
+  .passive {
     padding: 0.2rem;
     border-radius: 4px;
   }

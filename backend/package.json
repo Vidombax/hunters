@@ -1,6 +1,7 @@
 {
   "name": "hunter-backend",
   "version": "0.0.1",
+  "type": "module",
   "main": "start",
   "scripts": {
     "start": "node start.js",

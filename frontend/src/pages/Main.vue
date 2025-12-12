@@ -11,6 +11,8 @@
   const filters = ref([]);
   const isLoaded = ref(false);
   const isTreadsOpen = ref(true);
+  const token = ref(localStorage.getItem('token'));
+  const data = ref({});
 
   let filter_test = {
     id_filter: 1,
@@ -21,8 +23,15 @@
     name: 'Охотники'
   }
 
-  onMounted(async () => {
+  filters.value.push(filter_test)
+  filters.value.push(filter_test2)
 
+  onMounted(async () => {
+    const data = {
+      token: token.value
+    }
+
+    threads.value = await threadStore.getThreads(data);
   });
 </script>
 
@@ -36,14 +45,16 @@
       <TreadsFilters :tread-types="filters" />
       <div class="treads">
         <Tread
-            v-for="item in 10"
+            v-if="threads"
+            v-for="item in threads"
             :key="item.id"
-            :id-tread="tread.idTread"
-            :header="tread.header"
-            :date="tread.date"
-            :id-user="tread.idUser"
-            :user-name="tread.userName"
+            :id-tread="item.id_thread"
+            :header="item.header"
+            :date="item.date_publish"
+            :id-user="item.id_user"
+            :user-name="item.name"
             :types-tread="filters"
+            :score="item.score"
         />
       </div>
     </div>

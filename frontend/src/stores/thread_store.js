@@ -52,7 +52,7 @@ export const useThreadStore = defineStore('thread', () => {
         try {
             threads.value = await api.getThreads(data);
 
-            return threads;
+            return threads.value.threads;
         }
         catch (err) {
             error.value = err.response?.data?.message || 'Ошибка вывода тредов';

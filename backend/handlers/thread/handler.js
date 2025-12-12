@@ -1,3 +1,5 @@
+import {getDate, getMonth, getYear, parseISO} from 'date-fns'
+
 import db from '../../db.js'
 import logger from '../../logger.js'
 
@@ -78,7 +80,7 @@ class ThreadHandler {
         let data = {
             thread: [],
             comments: [],
-            threadScore: 0
+            score: 0
         };
 
         const client = await db.connect();
@@ -87,23 +89,26 @@ class ThreadHandler {
             await client.query('BEGIN');
 
             const { rows } = await client.query(
-                `SELECT * FROM threads 
-                    WHERE id_thread = $1`, 
+                `SELECT id_thread, header, description, date_publish::text as date_publish, u.id_user, is_active, tags, u.name FROM threads INNER JOIN public.users u on u.id_user = threads.id_user
+                 WHERE id_thread = $1`,
                 [id]
             );
 
             if (rows.length > 0) {
+                let date = parseISO(rows[0].date_publish);
+                rows[0].date_publish = `${getDate(date)}.${getMonth(date)}.${getYear(date)}`;
+
                 data.thread = rows[0];
 
                 logger.info(`${funcName}: Получаем оценку по треду ${id}`);
                 const getScoreByThread = await client.query(
-                    `SELECT SUM(score) AS thread_score FROM thread_scores 
+                    `SELECT SUM(score)::integer AS thread_score FROM thread_scores 
                                   WHERE id_score = $1`,
                     [id]
                 );
 
                 if (getScoreByThread.rows.length > 1) {
-                    data.threadScore = getScoreByThread.rows[0].thread_score;
+                    data.score = getScoreByThread.rows[0].thread_score;
                 }
 
                 logger.info(`${funcName}: Получаем комментарии по треду ${id}`);
@@ -144,10 +149,33 @@ class ThreadHandler {
             await client.query('BEGIN');
 
             const { rows } = await client.query(
-                `SELECT * FROM threads`
+                `SELECT id_thread, header, description, date_publish::text as date_publish, u.id_user, is_active, tags, u.name
+                 FROM threads
+                          INNER JOIN public.users u on u.id_user = threads.id_user
+                 `
             );
 
-            res.status(200).json({ message: 'Получили треды', threads: rows });
+            if (rows.length > 0) {
+                for (const item of rows) {
+                    const getScoreByThread = await client.query(
+                        `SELECT SUM(score)::integer AS thread_score FROM thread_scores 
+                                  WHERE id_thread = $1`,
+                        [item.id_thread]
+                    );
+
+                    if (getScoreByThread.rows[0].thread_score > 0) {
+                        item.score = getScoreByThread.rows[0].thread_score;
+                    }
+                    else {
+                        item.score = 0;
+                    }
+
+                    let date = parseISO(item.date_publish);
+                    item.date_publish = `${getDate(date)}.${getMonth(date)}.${getYear(date)}`;
+                }
+
+                res.status(200).json({ message: 'Получили треды', threads: rows });
+            }
     
             await client.query('COMMIT');
         }
