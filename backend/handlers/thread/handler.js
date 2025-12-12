@@ -113,12 +113,27 @@ class ThreadHandler {
 
                 logger.info(`${funcName}: Получаем комментарии по треду ${id}`);
                 const getCommentsByThread = await client.query(
-                    `SELECT id_user, text, date_publish FROM comments 
-                                   WHERE id_thread = $1`,
+                    `SELECT
+                         u.id_user,
+                         u.name,
+                         c.text,
+                         c.date_publish::text AS date_publish,
+                             COALESCE(SUM(cs.score), 0)::integer AS comment_score
+                     FROM comments c
+                              INNER JOIN users u ON u.id_user = c.id_user
+                              LEFT JOIN comment_scores cs ON c.id_comment = cs.id_comment
+                     WHERE c.id_thread = $1
+                     GROUP BY u.id_user, u.name, c.text, c.date_publish, c.id_comment
+                     ORDER BY c.date_publish;
+                    `,
                     [id]
                 );
 
                 if (getCommentsByThread.rows.length > 0) {
+                    for (const item of getCommentsByThread.rows) {
+                        let date = parseISO(item.date_publish);
+                        item.date_publish = `${getDate(date)}.${getMonth(date)}.${getYear(date)}`;
+                    }
                     data.comments = getCommentsByThread.rows;
                 }
 

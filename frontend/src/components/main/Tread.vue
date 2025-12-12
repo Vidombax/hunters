@@ -26,7 +26,7 @@
       />
     </div>
     <div class="tread_info">
-      <router-link :to="'/tread/' + props.idTread">
+      <router-link :to="'/thread/' + props.idTread">
         <p class="text-2xl header">{{ props.header }}</p>
       </router-link>
     </div>

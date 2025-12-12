@@ -4,6 +4,7 @@
   import Tread from '@/components/main/Tread.vue'
 
   import { useThreadStore } from '@/stores/thread_store.js'
+  import AddThread from "@/components/AddThread.vue";
 
   const threadStore = useThreadStore();
 
@@ -25,6 +26,7 @@
 </script>
 
 <template>
+  <AddThread />
   <div class="blocks_selector">
     <p class="block block_selected">Треды</p>
     <p class="block">Чаты</p>

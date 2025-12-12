@@ -17,7 +17,7 @@ export const useThreadStore = defineStore('thread', () => {
         try {
             thread.value = await api.createThread(data);
 
-            return thread;
+            return thread.value;
         }
         catch (err) {
             error.value = err.response?.data?.message || 'Ошибка создания треда';
@@ -35,7 +35,7 @@ export const useThreadStore = defineStore('thread', () => {
         try {
             thread.value = await api.getThread(data);
 
-            return thread;
+            return thread.value.data;
         }
         catch (err) {
             error.value = err.response?.data?.message || 'Ошибка вывода треда';
@@ -71,7 +71,7 @@ export const useThreadStore = defineStore('thread', () => {
         try {
             message.value = await api.updateThread(data).message;
 
-            return message;
+            return message.value;
         }
         catch (err) {
             error.value = err.response?.data?.message || 'Ошибка обновление треда';
@@ -89,7 +89,7 @@ export const useThreadStore = defineStore('thread', () => {
         try {
             message.value = await api.setVisibilityThread(data);
 
-            return message;
+            return message.value;
         }
         catch (err) {
             error.value = err.response?.data?.message || 'Ошибка обновление треда';
