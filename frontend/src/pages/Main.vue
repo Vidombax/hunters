@@ -13,6 +13,7 @@
   const isLoaded = ref(false);
   const isTreadsOpen = ref(true);
   const token = ref(localStorage.getItem('token'));
+  const id = Number(localStorage.getItem('id'));
   const data = ref({});
 
   onMounted(async () => {
@@ -26,7 +27,9 @@
 </script>
 
 <template>
-  <AddThread />
+  <AddThread
+      v-if="id"
+  />
   <div class="blocks_selector">
     <p class="block block_selected">Треды</p>
     <p class="block">Чаты</p>
