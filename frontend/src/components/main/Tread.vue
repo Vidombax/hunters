@@ -20,7 +20,7 @@
   <div class="tread">
     <div class="tread_types">
       <Cheap
-          v-for="item in typesTread"
+          v-for="item in typesTread.tags"
           :key="item.id"
           :name="item.name"
       />

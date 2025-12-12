@@ -53,7 +53,7 @@
             :date="item.date_publish"
             :id-user="item.id_user"
             :user-name="item.name"
-            :types-tread="filters"
+            :types-tread="item.tags"
             :score="item.score"
         />
       </div>
