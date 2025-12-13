@@ -6,6 +6,10 @@ body {
     font-family: 'Roboto', 'sans-serif';
 }
 
+.description_text {
+    color: #888888;
+}
+
 p {
     color: #FFFFF0;
 }

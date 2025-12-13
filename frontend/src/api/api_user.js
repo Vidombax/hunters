@@ -12,8 +12,18 @@ async function registrationUser(data) {
         password: data.password
     })).data;
 }
+async function createComment(data) {
+    const config = {
+        headers: {
+            Authorization: `${data.token}`
+        }
+    };
+
+    return (await axios.post(`/api/create-comment`, data, config)).data;
+}
 
 export default {
     loginUser,
     registrationUser,
+    createComment,
 }

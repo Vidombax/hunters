@@ -17,7 +17,7 @@ export const useThreadStore = defineStore('thread', () => {
         try {
             thread.value = await api.createThread(data);
 
-            return thread.value;
+            return thread.value.id;
         }
         catch (err) {
             error.value = err.response?.data?.message || 'Ошибка создания треда';

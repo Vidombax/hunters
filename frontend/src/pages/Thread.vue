@@ -6,24 +6,52 @@
   import Votes from '@/components/Votes.vue'
 
   import { useThreadStore } from '@/stores/thread_store.js'
+  import { useUserStore } from '@/stores/user_store.js'
 
   const threadStore = useThreadStore();
+  const userStore = useUserStore();
   const thread = ref({});
   const score = ref(0);
   const comments = ref([]);
   const token = ref(localStorage.getItem('token'));
+  const idUser = ref(Number(localStorage.getItem('id')));
   const route = useRoute();
   const id = ref(route.params.id);
   const data = ref(null);
   const newComment = ref('');
 
+  const addComment = async () => {
+    try {
+      if (newComment.value !== '') {
+        const data = {
+          token: token.value,
+          id_user: idUser.value,
+          comment: newComment.value,
+          id_thread: id.value
+        }
+
+        const response = await userStore.createComment(data);
+
+        comments.value.unshift(response);
+
+        newComment.value = '';
+      }
+      else {
+        alert('Нельзя отправить пустое сообщение');
+      }
+    }
+    catch (e) {
+      console.error(e);
+    }
+  }
+
   onMounted(async () => {
-    const data = {
+    data.value = {
       token: token.value,
       id: id.value
     }
 
-    data.value = await threadStore.getThread(data);
+    data.value = await threadStore.getThread(data.value);
     thread.value = data.value.thread;
     score.value = data.value.score;
     comments.value = data.value.comments;
@@ -42,7 +70,7 @@
       <p class="text-3xl">{{ thread.header }}</p>
     </div>
     <div class="description">
-      <p class="text-xl" :innerHTML="thread.description"></p>
+      <p class="text-xl" v-html="thread.description"></p>
     </div>
     <div class="action_block">
       <Votes :votes="score" />
@@ -51,7 +79,12 @@
       <p class="text-2xl">Комментарии</p>
       <div class="add_comment">
         <input type="text" v-model="newComment" placeholder="Текст..." />
-        <button v-if="newComment">Отправить</button>
+        <button
+            v-if="newComment"
+            @click="addComment"
+        >
+          Отправить
+        </button>
       </div>
       <div class="comments_block">
         <Comment
@@ -97,9 +130,6 @@
     align-items: flex-end;
     justify-content: flex-end;
     width: 100%;
-  }
-  .description p {
-    color: #888888;
   }
   .comments {
     display: flex;

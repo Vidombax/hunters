@@ -3,9 +3,10 @@ import { defineStore } from 'pinia'
 import api from '../api/api.js'
 
 export const useUserStore = defineStore('user', () => {
-  const user = ref(null)
-  const loading = ref(false)
-  const error = ref(null)
+  const user = ref(null);
+  const loading = ref(false);
+  const error = ref(null);
+  const comment = ref(null);
 
   async function login(credentials) {
     loading.value = true
@@ -51,6 +52,24 @@ export const useUserStore = defineStore('user', () => {
     localStorage.removeItem('token');
   }
 
+  async function createComment(data) {
+    loading.value = true;
+    error.value = null;
+
+    try {
+      comment.value = await api.createComment(data);
+
+      return comment.value.comment;
+    }
+    catch (err) {
+      error.value = err.response?.data?.message || 'Ошибка создания треда';
+      throw err
+    }
+    finally {
+      loading.value = false;
+    }
+  }
+
   return {
     user,
     loading,
@@ -58,5 +77,6 @@ export const useUserStore = defineStore('user', () => {
     login,
     register,
     logout,
+    createComment
   }
 })

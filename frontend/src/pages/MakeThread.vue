@@ -20,17 +20,24 @@
 
   const postThread = async () => {
     try {
-      for (const text of data.value.raw_description.ops) {
-        if (text.insert.image) {
-          data.value.description += ' <img ' + `src="${text.insert.image}" alt="${text.insert.image}">` + '</img> ';
+      if (data.value.header !== '' && data.value.raw_description.ops) {
+        for (const text of data.value.raw_description.ops) {
+          if (text.insert.image) {
+            data.value.description += ' <img ' + `src="${text.insert.image}" alt="${text.insert.image}">` + ' </img> ';
+          }
+          else {
+            data.value.description += '<p class="description_text"> ' + text.insert + ' </p>';
+          }
         }
-        else {
-          data.value.description += '<p> ' + text.insert + ' </p>';
-        }
-      }
 
-      data.value.tags = selectedTags.value;
-      const response = await threadStore.createThread(data.value);
+        data.value.tags = selectedTags.value;
+        const response = await threadStore.createThread(data.value);
+
+        location.replace(`/thread/${response}`);
+      }
+      else {
+        alert('Заполните поля');
+      }
     }
     catch (e) {
       console.error(e);

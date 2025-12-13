@@ -24,7 +24,7 @@ class ThreadHandler {
 
             await client.query('COMMIT');
 
-            res.status(200).json({ message: 'Тред был создан' });
+            res.status(200).json({ message: 'Тред был создан', id: thread.rows[0].id_thread });
         }
         catch (e) {
             await client.query('ROLLBACK');
@@ -126,7 +126,7 @@ class ThreadHandler {
                               LEFT JOIN comment_scores cs ON c.id_comment = cs.id_comment
                      WHERE c.id_thread = $1
                      GROUP BY u.id_user, u.name, c.text, c.date_publish, c.id_comment
-                     ORDER BY c.date_publish;
+                     ORDER BY c.id_comment DESC;
                     `,
                     [id]
                 );
@@ -169,6 +169,7 @@ class ThreadHandler {
                 `SELECT id_thread, header, description, date_publish::text as date_publish, u.id_user, is_active, tags, u.name
                  FROM threads
                           INNER JOIN public.users u on u.id_user = threads.id_user
+                 ORDER BY id_thread DESC
                  `
             );
 

@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken'
 
 import db from '../../db.js'
 import logger from '../../logger.js'
+import {getDate, getMonth, getYear, parseISO} from "date-fns";
 
 class UserHandler {
     async createUser(req, res) {
@@ -103,7 +104,7 @@ class UserHandler {
     async createComment(req, res) {
         const funcName = 'createComment';
 
-        const { idThread, idUser, comment } = req.body;
+        const { id_thread, id_user, comment } = req.body;
 
         const client = await db.connect();
 
@@ -112,10 +113,17 @@ class UserHandler {
 
             const createComment = await client.query(
                 'INSERT INTO comments (id_thread, id_user, text, date_publish) ' +
-                'VALUES ($1, $2, $3, CURRENT_TIME)',
-                [idThread, idUser, comment.trim()]
+                'VALUES ($1, $2, $3, CURRENT_DATE) ' +
+                'RETURNING *',
+                [id_thread, id_user, comment.trim()]
             );
-            res.status(200).json({ message: 'Комментарий создан' });
+
+            createComment.rows[0].comment_score = 0;
+
+            let date = createComment.rows[0].date_publish;
+            createComment.rows[0].date_publish = `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}`;
+
+            res.status(200).json({ message: 'Комментарий создан', comment: createComment.rows[0] });
 
             await client.query('COMMIT');
         }
