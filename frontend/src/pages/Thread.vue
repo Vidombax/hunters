@@ -73,7 +73,18 @@
       <p class="text-xl" v-html="thread.description"></p>
     </div>
     <div class="action_block">
-      <Votes :votes="score" />
+      <Votes
+          v-if="score !== 0"
+          :votes="score"
+          :id_tread="id"
+          :vote-func="1"
+      />
+      <Votes
+          v-else
+          :votes="score"
+          :id_tread="id"
+          :vote-func="1"
+      />
     </div>
     <div class="comments">
       <p class="text-2xl">Комментарии</p>
@@ -90,6 +101,7 @@
         <Comment
             v-for="item in comments"
             :key="item.id"
+            :id-comment="item.id_comment"
             :id-user="item.id_user"
             :name-user="item.name"
             :comment="item.text"

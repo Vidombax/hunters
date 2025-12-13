@@ -105,17 +105,21 @@ class ThreadHandler {
                 logger.info(`${funcName}: Получаем оценку по треду ${id}`);
                 const getScoreByThread = await client.query(
                     `SELECT SUM(score)::integer AS thread_score FROM thread_scores 
-                                  WHERE id_score = $1`,
+                                  WHERE id_thread = $1`,
                     [id]
                 );
 
-                if (getScoreByThread.rows.length > 1) {
+                if (getScoreByThread.rows[0].thread_score !== null) {
                     data.score = getScoreByThread.rows[0].thread_score;
+                }
+                else {
+                    data.score = 0;
                 }
 
                 logger.info(`${funcName}: Получаем комментарии по треду ${id}`);
                 const getCommentsByThread = await client.query(
                     `SELECT
+                         c.id_comment,
                          u.id_user,
                          u.name,
                          c.text,
@@ -181,7 +185,7 @@ class ThreadHandler {
                         [item.id_thread]
                     );
 
-                    if (getScoreByThread.rows[0].thread_score > 0) {
+                    if (getScoreByThread.rows[0].thread_score !== null) {
                         item.score = getScoreByThread.rows[0].thread_score;
                     }
                     else {

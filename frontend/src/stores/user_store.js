@@ -62,7 +62,39 @@ export const useUserStore = defineStore('user', () => {
       return comment.value.comment;
     }
     catch (err) {
-      error.value = err.response?.data?.message || 'Ошибка создания треда';
+      error.value = err.response?.data?.message || 'Ошибка создания комментария';
+      throw err
+    }
+    finally {
+      loading.value = false;
+    }
+  }
+
+  async function rateThread(data) {
+    loading.value = true;
+    error.value = null;
+
+    try {
+      await api.rateThread(data);
+    }
+    catch (err) {
+      error.value = err.response?.data?.message || 'Ошибка оценки треда';
+      throw err
+    }
+    finally {
+      loading.value = false;
+    }
+  }
+
+  async function rateComment(data) {
+    loading.value = true;
+    error.value = null;
+
+    try {
+      await api.rateComment(data);
+    }
+    catch (err) {
+      error.value = err.response?.data?.message || 'Ошибка оценки комментария';
       throw err
     }
     finally {
@@ -77,6 +109,8 @@ export const useUserStore = defineStore('user', () => {
     login,
     register,
     logout,
-    createComment
+    createComment,
+    rateThread,
+    rateComment
   }
 })

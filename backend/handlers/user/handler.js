@@ -139,7 +139,7 @@ class UserHandler {
     async rateTread(req, res) {
         const funcName = 'rateTread';
 
-        const { idTread, idUser, score } = req.body;
+        const { id_tread, id_user, score } = req.body;
 
         const client = await db.connect();
 
@@ -149,7 +149,7 @@ class UserHandler {
             const getRate = await client.query(
                 'SELECT * FROM thread_scores ' +
                 'WHERE id_user = $1 AND id_thread = $2',
-                [idUser, idTread]
+                [id_user, id_tread]
             );
 
             if (getRate.rows.length > 0) {
@@ -157,7 +157,7 @@ class UserHandler {
                     const updateRate = await client.query(
                         'UPDATE thread_scores SET score = $1 ' +
                         'WHERE id_user = $2 AND id_thread = $3',
-                        [score, idUser, idTread]
+                        [score, id_user, id_tread]
                     );
                     res.status(200).json({ message: 'Оценка обновлена' });
                 }
@@ -170,7 +170,7 @@ class UserHandler {
                 const createRate = await client.query(
                     'INSERT INTO thread_scores (id_thread, id_user, score) ' +
                     'VALUES ($1, $2, $3)',
-                    [idTread, idUser, score]
+                    [id_tread, id_user, score]
                 );
                 res.status(200).json({ message: 'Оцена создана' });
             }
@@ -189,7 +189,7 @@ class UserHandler {
     async rateComment(req, res) {
         const funcName = 'rateComment';
 
-        const { idComment, idUser, score } = req.body;
+        const { id_comment, id_user, score } = req.body;
 
         const client = await db.connect();
 
@@ -199,7 +199,7 @@ class UserHandler {
             const getRate = await client.query(
                 'SELECT * FROM comment_scores ' +
                 'WHERE id_user = $1 AND id_comment = $2',
-                [idUser, idComment]
+                [id_user, id_comment]
             );
 
             if (getRate.rows.length > 0) {
@@ -207,7 +207,7 @@ class UserHandler {
                     const updateRate = await client.query(
                         'UPDATE comment_scores SET score = $1 ' +
                         'WHERE id_user = $2 AND id_comment = $3',
-                        [score, idUser, idComment]
+                        [score, id_user, id_comment]
                     );
                     res.status(200).json({ message: 'Оценка обновлена' });
                 }
@@ -220,7 +220,7 @@ class UserHandler {
                 const createRate = await client.query(
                     'INSERT INTO comment_scores (id_comment, id_user, score) ' +
                     'VALUES ($1, $2, $3)',
-                    [idComment, idUser, score]
+                    [id_comment, id_user, score]
                 );
                 res.status(200).json({ message: 'Оцена создана' });
             }

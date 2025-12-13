@@ -40,6 +40,8 @@
       </div>
       <Votes
           :votes="score"
+          :id_tread="props.idTread"
+          :vote-func="1"
       />
       <div class="share">
         <Share />

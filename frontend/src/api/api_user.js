@@ -21,9 +21,30 @@ async function createComment(data) {
 
     return (await axios.post(`/api/create-comment`, data, config)).data;
 }
+async function rateThread(data) {
+    const config = {
+        headers: {
+            Authorization: `${data.token}`
+        }
+    };
+
+    return (await axios.post(`/api/rate-tread`, data, config)).data;
+}
+
+async function rateComment(data) {
+    const config = {
+        headers: {
+            Authorization: `${data.token}`
+        }
+    };
+
+    return (await axios.post(`/api/rate-comment`, data, config)).data;
+}
 
 export default {
     loginUser,
     registrationUser,
     createComment,
+    rateThread,
+    rateComment
 }

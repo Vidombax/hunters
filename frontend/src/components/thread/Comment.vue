@@ -1,9 +1,8 @@
 <script setup>
-  import { ref } from 'vue'
-
   import Votes from '@/components/Votes.vue'
 
   const props = defineProps({
+    idComment: Number,
     idUser: Number,
     nameUser: String,
     comment: String,
@@ -30,6 +29,8 @@
       <div>
         <Votes
             :votes="votes"
+            :id_comment="props.idComment"
+            :vote-func="2"
         />
       </div>
     </div>
