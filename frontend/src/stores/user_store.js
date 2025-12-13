@@ -102,6 +102,24 @@ export const useUserStore = defineStore('user', () => {
     }
   }
 
+  async function getUser(data) {
+    loading.value = true;
+    error.value = null;
+
+    try {
+      user.value = await api.getUser(data);
+
+      return user.value.data;
+    }
+    catch (err) {
+      error.value = err.response?.data?.message || 'Ошибка вывода треда';
+      throw err;
+    }
+    finally {
+      loading.value = false;
+    }
+  }
+
   return {
     user,
     loading,
@@ -111,6 +129,7 @@ export const useUserStore = defineStore('user', () => {
     logout,
     createComment,
     rateThread,
-    rateComment
+    rateComment,
+    getUser
   }
 })

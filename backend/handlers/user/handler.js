@@ -101,6 +101,39 @@ class UserHandler {
             client.release();
         }
     }
+    async getUser(req, res) {
+        const funcName = 'getUser';
+
+        const { id } = req.params;
+        const client = await db.connect();
+
+        try {
+            await client.query('BEGIN');
+
+            const getUser = await client.query(
+                'SELECT name, is_admin FROM users ' +
+                'WHERE id_user = $1',
+                [id]
+            );
+
+            if (getUser.rows.length > 0) {
+                res.status(200).json({ message: 'Пользователь найден' });
+            }
+            else {
+                res.status(404).json({ message: 'Пользователь не найден' });
+            }
+
+            await client.query('COMMIT');
+        }
+        catch (e) {
+            await client.query('ROLLBACK');
+            logger.error(`${funcName}: Ошибка по получению данных пользователя:`, e);
+            res.status(500).json({ message: 'Ошибка на стороне сервера' });
+        }
+        finally {
+            client.release();
+        }
+    }
     async createComment(req, res) {
         const funcName = 'createComment';
 

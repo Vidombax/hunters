@@ -12,6 +12,15 @@ async function registrationUser(data) {
         password: data.password
     })).data;
 }
+async function getUser(data) {
+    const config = {
+        headers: {
+            Authorization: `${data.token}`
+        }
+    };
+
+    return (await axios.get(`/api/user/${data.id}`, config)).data;
+}
 async function createComment(data) {
     const config = {
         headers: {
@@ -46,5 +55,6 @@ export default {
     registrationUser,
     createComment,
     rateThread,
-    rateComment
+    rateComment,
+    getUser
 }
