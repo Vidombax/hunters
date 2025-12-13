@@ -1,10 +1,12 @@
 <script setup>
-
+  const id = localStorage.getItem('id');
 </script>
 
 <template>
   <div class="cursor-pointer">
-    <img src="../assets/default_profile_photo.png" alt="ProfilePicture">
+    <router-link v-if="id" :to="'/user/' + id">
+      <img src="../assets/default_profile_photo.png" alt="ProfilePicture">
+    </router-link>
   </div>
 </template>
 

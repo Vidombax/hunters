@@ -105,6 +105,10 @@ class UserHandler {
         const funcName = 'getUser';
 
         const { id } = req.params;
+        let data = {
+            user: {},
+            tags: []
+        }
         const client = await db.connect();
 
         try {
@@ -116,8 +120,62 @@ class UserHandler {
                 [id]
             );
 
+            const getTagsByUser = await client.query(`SELECT DISTINCT
+                                                          t.id_tag,
+                                                          t.name
+                                                      FROM tags t
+                                                      WHERE t.is_active = true
+                                                        AND (
+                                                              EXISTS (
+                                                                  SELECT 1
+                                                                  FROM threads th
+                                                                           JOIN thread_scores ts ON ts.id_thread = th.id_thread
+                                                                  WHERE ts.id_user = $1
+                                                                    AND th.is_active = true
+                                                                    AND EXISTS (
+                                                                      SELECT 1
+                                                                      FROM jsonb_array_elements(th.tags::jsonb) AS tag_obj
+                                                                      WHERE (tag_obj->>'id_tag')::int = t.id_tag
+                                                                  )
+                                                              )
+                                                              OR
+                                                              EXISTS (
+                                                                  SELECT 1
+                                                                  FROM threads th
+                                                                  WHERE th.id_user = $1
+                                                                    AND th.is_active = true
+                                                                    AND EXISTS (
+                                                                      SELECT 1
+                                                                      FROM jsonb_array_elements(th.tags::jsonb) AS tag_obj
+                                                                      WHERE (tag_obj->>'id_tag')::int = t.id_tag
+                                                                  )
+                                                              )
+                                                              OR
+                                                              EXISTS (
+                                                                  SELECT 1
+                                                                  FROM threads th
+                                                                           JOIN comments c ON c.id_thread = th.id_thread
+                                                                  WHERE c.id_user = $1
+                                                                    AND th.is_active = true
+                                                                    AND EXISTS (
+                                                                      SELECT 1
+                                                                      FROM jsonb_array_elements(th.tags::jsonb) AS tag_obj
+                                                                      WHERE (tag_obj->>'id_tag')::int = t.id_tag
+                                                                  )
+                                                              )
+                                                          )
+                                                      ORDER BY t.name`, [id]);
+
+            if (getTagsByUser.rows.length > 0) {
+                data.tags = getTagsByUser.rows;
+            }
+            else {
+                data.tags = [];
+            }
+
             if (getUser.rows.length > 0) {
-                res.status(200).json({ message: 'Пользователь найден' });
+                data.user = getUser.rows[0];
+                res.status(200).json({ message: 'Пользователь найден', user: data.user, tags: data.tags });
             }
             else {
                 res.status(404).json({ message: 'Пользователь не найден' });

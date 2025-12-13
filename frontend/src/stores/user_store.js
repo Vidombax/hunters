@@ -50,6 +50,7 @@ export const useUserStore = defineStore('user', () => {
     user.value = null
     localStorage.removeItem('id');
     localStorage.removeItem('token');
+    location.replace('/');
   }
 
   async function createComment(data) {
@@ -109,7 +110,7 @@ export const useUserStore = defineStore('user', () => {
     try {
       user.value = await api.getUser(data);
 
-      return user.value.data;
+      return user.value;
     }
     catch (err) {
       error.value = err.response?.data?.message || 'Ошибка вывода треда';
