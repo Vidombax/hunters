@@ -62,7 +62,7 @@ button:focus {
 }
 
 .selected {
-    fill: #f1801e;
+    fill: #f1801e !important;
 }
 
 input {
